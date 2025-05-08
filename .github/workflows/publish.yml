@@ -31,3 +31,5 @@ jobs:
           publish_dir: ./dist/vortexscans
           destination_dir: sources/vortexscans
           publish_branch: gh-pages
+
+# Trigger workflow
