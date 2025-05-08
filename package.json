@@ -1,7 +1,7 @@
 {
   "name": "suwatte-runners",
   "version": "2.0.0",
-  "description": "content sources made by mantton :]",
+  "description": "content sources",
   "main": "index.js",
   "scripts": {
     "test": "jest",
@@ -16,9 +16,9 @@
     "suwatte"
   ],
   "author": {
-    "name": "Mantton",
-    "email": "mantton.official@gmail.com",
-    "url": "https://mantton.com"
+    "name": "yea",
+    "email": "typeshi@gmail.com",
+    "url": "https://idk.com"
   },
   "license": "MIT",
   "devDependencies": {
@@ -54,6 +54,6 @@
     "seedrandom": "^3.0.5"
   },
   "stt": {
-    "listName": "sources i maintain"
+    "listName": "sources"
   }
 }
