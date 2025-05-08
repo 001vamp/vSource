@@ -1,37 +1,35 @@
 import fs from 'fs';
 import path from 'path';
 import emulate from "@suwatte/emulator";
-import { Target } from "../runners/mangafire/";
+import { Target } from "../runners/vortexscans/";
+import express, { Request, Response } from 'express';
+import morgan from 'morgan';
+import axios from 'axios';
+import { Dirent } from 'fs';
+
+const runners: { [name: string]: any; } = {};
+runners["vortexscans"] = emulate(Target);
+
+axios.defaults.headers.common['User-Agent'] = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/121.0';
 
 function listDirectories(directory: string): string[] {
     return fs.readdirSync(directory, { withFileTypes: true })
-        .filter(dirent => dirent.isDirectory())
-        .map(dirent => dirent.name);
+        .filter((dirent: Dirent) => dirent.isDirectory())
+        .map((dirent: Dirent) => dirent.name);
 }
-const runner_names = listDirectories(path.join(__dirname, "../runners/"));
-const runners: { [name: string]: any; } = {};
-runners["mangafire"] = emulate(Target);
-// for (const runner of runner_names) {
-  // import("../runners/" + runner).then(m => {
-  //   runners[runner] = emulate(m.Target);
-  // });
-// }
 
-const axios = require("axios");
-axios.defaults.headers.common['User-Agent'] = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/121.0';
-
-async function get_popular(runner_name: string, page: any) {;
+async function get_popular(runner_name: string, page: number = 1) {
     const data = await runners[runner_name].getDirectory({
-        page: page || 1,
+        page,
         listId: "template_popular_list",
     });
     return data;
 }
 
-async function get_query(runner_name: string, query: string, page: any) {
+async function get_query(runner_name: string, query: string, page: number = 1) {
     const data = await runners[runner_name].getDirectory({
-        page: page || 1,
-        query: query,
+        page,
+        query,
     });
     return data;
 }
@@ -46,9 +44,6 @@ async function get_pages(runner_name: string, id: string, chapterId: string) {
     return data;
 }
 
-import express, { Request, Response } from 'express';
-import morgan from 'morgan';
-
 const app = express();
 const port = process.env.PORT || 3000;
 
@@ -61,7 +56,7 @@ app.get('/runners', async (_, res: Response) => {
 app.get('/popular', async (req: Request, res: Response) => {
     const { runner, page } = req.query;
     if (runner) {
-        res.send(await get_popular(runner as string, page));
+        res.send(await get_popular(runner as string, Number(page)));
     } else {
         res.status(400).send({});
     }
@@ -69,7 +64,7 @@ app.get('/popular', async (req: Request, res: Response) => {
 app.get('/search', async (req: Request, res: Response) => {
     const { runner, search, page } = req.query;
     if (runner && search) {
-        res.send(await get_query(runner as string, search as string, page));
+        res.send(await get_query(runner as string, search as string, Number(page)));
     } else {
         res.status(400).send({});
     }

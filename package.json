@@ -7,7 +7,7 @@
     "test": "jest",
     "prep": "rm -rf ./dist && tsc",
     "dev": "nodemon",
-    "build": "daisuke build",
+    "build": "ts-node ./scripts/build.ts",
     "serve": "daisuke serve",
     "lint": "eslint"
   },
@@ -28,6 +28,7 @@
     "@types/jest": "^29.2.4",
     "@types/lodash": "^4.14.191",
     "@types/morgan": "^1.9.9",
+    "@types/node": "^22.15.15",
     "@types/seedrandom": "^3.0.6",
     "@typescript-eslint/eslint-plugin": "^5.55.0",
     "@typescript-eslint/parser": "^5.55.0",
